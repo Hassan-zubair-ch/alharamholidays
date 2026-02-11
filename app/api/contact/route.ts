@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
+import { CONTACT } from "@/lib/constants";
 
-const TO_EMAIL = process.env.CONTACT_EMAIL ?? "info@alharamtravel.uk";
-const FROM_EMAIL = process.env.FROM_EMAIL ?? "onboarding@resend.dev";
-const FROM_NAME = "Al Haram Travel Website";
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? process.env.EMAIL_USER ?? "info@alharamtravel.uk";
+const FROM_EMAIL = process.env.EMAIL_USER ?? "info@alharamtravel.uk";
+const FROM_NAME = "Al Haram Travel";
 
 type Body = {
   name?: string;
@@ -12,6 +13,24 @@ type Body = {
   message?: string;
   package?: string;
 };
+
+function getTransporter() {
+  const host = process.env.EMAIL_HOST;
+  const user = process.env.EMAIL_USER;
+  const pass = process.env.EMAIL_PASS;
+  const port = process.env.EMAIL_PORT ? parseInt(process.env.EMAIL_PORT, 10) : 465;
+
+  if (!host || !user || !pass) {
+    return null;
+  }
+
+  return nodemailer.createTransport({
+    host,
+    port: Number.isNaN(port) ? 465 : port,
+    secure: port === 465,
+    auth: { user, pass },
+  });
+}
 
 export async function POST(request: Request) {
   try {
@@ -25,21 +44,20 @@ export async function POST(request: Request) {
       );
     }
 
-    const apiKey = process.env.RESEND_API_KEY;
-    if (!apiKey) {
-      console.error("RESEND_API_KEY is not set");
+    const transporter = getTransporter();
+    if (!transporter) {
+      console.error("Email not configured: set EMAIL_HOST, EMAIL_USER, EMAIL_PASS (and optionally EMAIL_PORT)");
       return NextResponse.json(
         { error: "Email service is not configured." },
         { status: 500 }
       );
     }
 
-    const resend = new Resend(apiKey);
     const subject = packageName
       ? `Enquiry: ${packageName}`
       : "Contact form submission";
 
-    const text = [
+    const enquiryText = [
       `Name: ${name}`,
       `Email: ${email}`,
       phone ? `Phone: ${phone}` : "",
@@ -50,21 +68,48 @@ export async function POST(request: Request) {
       .filter(Boolean)
       .join("\n");
 
-    const { error } = await resend.emails.send({
-      from: `${FROM_NAME} <${FROM_EMAIL}>`,
-      to: [TO_EMAIL],
-      subject,
-      text,
+    const enquiryHtml = [
+      `<p><strong>Name:</strong> ${escapeHtml(name)}</p>`,
+      `<p><strong>Email:</strong> ${escapeHtml(email)}</p>`,
+      phone ? `<p><strong>Phone:</strong> ${escapeHtml(phone)}</p>` : "",
+      packageName ? `<p><strong>Package:</strong> ${escapeHtml(packageName)}</p>` : "",
+      "<p><strong>Message:</strong></p>",
+      `<p>${escapeHtml(message || "(No message)").replace(/\n/g, "<br>")}</p>`,
+    ]
+      .filter(Boolean)
+      .join("");
+
+    // 1) Send enquiry to your inbox (admin)
+    await transporter.sendMail({
+      from: `"${FROM_NAME}" <${FROM_EMAIL}>`,
+      to: ADMIN_EMAIL,
       replyTo: email,
+      subject,
+      text: enquiryText,
+      html: `<!DOCTYPE html><html><body>${enquiryHtml}</body></html>`,
     });
 
-    if (error) {
-      console.error("Resend error:", error);
-      return NextResponse.json(
-        { error: "Failed to send email." },
-        { status: 500 }
-      );
-    }
+    // 2) Send confirmation to the user
+    const confirmSubject = "We've received your message – Al Haram Travel";
+    const confirmHtml = `
+<!DOCTYPE html>
+<html>
+<body style="font-family: sans-serif; line-height: 1.6; color: #334155;">
+  <p>Dear ${escapeHtml(name)},</p>
+  <p>Thank you for getting in touch. We have received your message and will get back to you as soon as possible.</p>
+  <p>If your enquiry is urgent, you can call us on <strong>${CONTACT.phone}</strong>.</p>
+  <p>Best regards,<br><strong>Al Haram Travel</strong></p>
+</body>
+</html>`;
+    const confirmText = `Dear ${name},\n\nThank you for getting in touch. We have received your message and will get back to you as soon as possible.\n\nIf your enquiry is urgent, you can call us on ${CONTACT.phone}.\n\nBest regards,\nAl Haram Travel`;
+
+    await transporter.sendMail({
+      from: `"${FROM_NAME}" <${FROM_EMAIL}>`,
+      to: email,
+      subject: confirmSubject,
+      text: confirmText,
+      html: confirmHtml,
+    });
 
     return NextResponse.json({ success: true });
   } catch (e) {
@@ -74,4 +119,12 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
+}
+
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 }
