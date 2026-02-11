@@ -26,7 +26,7 @@ export default function RootLayout({
     <html lang="en" className={plusJakarta.variable}>
       <body className="antialiased min-h-screen flex flex-col bg-[#faf8f5] text-[#0a0a0a] overflow-x-hidden">
         <Navbar />
-        <main className="flex-1 w-full min-w-0 overflow-x-hidden">{children}</main>
+        <main className="flex-1 w-full min-w-0 overflow-x-hidden pt-20">{children}</main>
         <Footer />
         <FloatingActionButtons />
       </body>

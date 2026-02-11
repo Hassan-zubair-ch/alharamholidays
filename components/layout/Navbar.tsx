@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -17,10 +17,31 @@ const NAV_LINKS = [
 export function Navbar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [visible, setVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const y = window.scrollY;
+      if (y < 80) {
+        setVisible(true);
+      } else if (y > lastScrollY) {
+        setVisible(false);
+      } else {
+        setVisible(true);
+      }
+      setLastScrollY(y);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
 
   return (
-    <header
-      className="sticky top-0 z-50 w-full py-3 bg-[#0f172a] shadow-lg border-b border-white/5"
+    <motion.header
+      initial={{ y: 0 }}
+      animate={{ y: visible ? 0 : -120 }}
+      transition={{ type: "tween", duration: 0.25, ease: "easeInOut" }}
+      className="fixed top-0 left-0 right-0 z-50 w-full py-3 bg-[#0f172a] shadow-lg border-b border-white/5"
       style={{
         backgroundImage: "linear-gradient(180deg, rgba(15,23,42,0.99) 0%, rgba(15,23,42,0.97) 100%)",
       }}
@@ -113,6 +134,6 @@ export function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </motion.header>
   );
 }

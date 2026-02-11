@@ -552,7 +552,7 @@ export const ABOUT = {
     },
   ],
   stats: [
-    { value: "10+", label: "Years of experience" },
+    { value: "8+", label: "Years of experience" },
     { value: "20+", label: "Destinations" },
     { value: "5000+", label: "Happy customers" },
   ],
@@ -569,7 +569,7 @@ export const ABOUT = {
   ],
 };
 
-// Humanized testimonials for home
+// Humanized testimonials for home (legacy 3-card layout)
 export const TESTIMONIALS = [
   {
     name: "Sarah Mitchell",
@@ -593,6 +593,102 @@ export const TESTIMONIALS = [
     avatar: "DC",
   },
 ];
+
+// Trustpilot-style reviews (for "What our customers are saying" section)
+export type TrustpilotReview = {
+  headline: string;
+  body: string;
+  name: string;
+  timeAgo: string;
+  rating: 5 | 4.5;
+  verified: true;
+};
+
+export const TRUSTPILOT_REVIEWS: TrustpilotReview[] = [
+  {
+    headline: "Extremely helpful and approachable...",
+    body: "Extremely helpful and approachable staff. Al Haram Travel sorted our Dubai package quickly and answered every question. Will use again.",
+    name: "Sarah Mitchell",
+    timeAgo: "2 days ago",
+    rating: 5,
+    verified: true,
+  },
+  {
+    headline: "The team was excellent from start to...",
+    body: "The team was excellent from start to finish. Very professional and explained everything clearly. Our Paris holiday was perfect.",
+    name: "James Thompson",
+    timeAgo: "5 days ago",
+    rating: 5,
+    verified: true,
+  },
+  {
+    headline: "Thanks again for sorting and booking...",
+    body: "Thanks again for sorting and booking our holiday to Egypt and emailing all the details. Al Haram Travel made it stress-free.",
+    name: "Vanda Roberts",
+    timeAgo: "1 week ago",
+    rating: 5,
+    verified: true,
+  },
+  {
+    headline: "Brilliant service, would definitely...",
+    body: "Brilliant service, would definitely recommend. We got a great deal on Malta and the support was there whenever we needed it.",
+    name: "Barry Lewis",
+    timeAgo: "1 week ago",
+    rating: 5,
+    verified: true,
+  },
+  {
+    headline: "First class experience from booking...",
+    body: "First class experience from booking to return. Al Haram Travel handled our Turkey trip flawlessly. Hotel was exactly as described.",
+    name: "Emma Clarke",
+    timeAgo: "2 weeks ago",
+    rating: 5,
+    verified: true,
+  },
+  {
+    headline: "Very pleased with our Greece holiday...",
+    body: "Very pleased with our Greece holiday package. Transparent pricing and the team was always quick to respond. Already planning our next trip with them.",
+    name: "David Chen",
+    timeAgo: "3 weeks ago",
+    rating: 5,
+    verified: true,
+  },
+  {
+    headline: "Smooth booking process and great...",
+    body: "Smooth booking process and great communication. Our Bali package was well organised and the transfers were on time. Highly recommend Al Haram Travel.",
+    name: "Litunia Wyspianska",
+    timeAgo: "1 month ago",
+    rating: 5,
+    verified: true,
+  },
+  {
+    headline: "Couldn't ask for better service...",
+    body: "Couldn't ask for better service. We booked Portugal through Al Haram Travel and everything ran like clockwork. Will be back for our next holiday.",
+    name: "Rachel Green",
+    timeAgo: "1 month ago",
+    rating: 4.5,
+    verified: true,
+  },
+  {
+    headline: "Professional and friendly from the...",
+    body: "Professional and friendly from the first call. They found us a great Spain deal and sorted all the paperwork. Very happy customers.",
+    name: "Michael Foster",
+    timeAgo: "2 months ago",
+    rating: 5,
+    verified: true,
+  },
+  {
+    headline: "Excellent value and no hidden fees...",
+    body: "Excellent value and no hidden fees. Al Haram Travel gave us a clear quote and delivered. Our New York trip was unforgettable. Thank you!",
+    name: "Sophie Williams",
+    timeAgo: "2 months ago",
+    rating: 5,
+    verified: true,
+  },
+];
+
+// For display: total review count (Trustpilot-style)
+export const TRUSTPILOT_REVIEW_COUNT = "5,000+";
 
 // WhatsApp link (use CONTACT.phone for number - UK format)
 export const WHATSAPP_LINK = `https://wa.me/442035048261`;

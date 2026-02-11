@@ -62,7 +62,7 @@ export const WHY_CHOOSE = [
 // Stats (from screenshot)
 export const STATS = [
   "5,000+ Happy Customers",
-  "10+ Years of Experience",
+  "8+ Years of Experience",
   "20+ Countries Served",
 ] as const;
 
