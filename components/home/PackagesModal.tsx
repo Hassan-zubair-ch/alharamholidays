@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { PARIS_PACKAGES } from "@/lib/constants";
 
@@ -147,12 +148,12 @@ export function PackagesModal({
                                 </li>
                               ))}
                             </ul>
-                            <button
-                              type="button"
-                              className={`mt-4 w-full py-3 rounded-xl font-semibold text-white ${colors.button} transition-colors`}
+                            <Link
+                              href="/contact?package=Paris%20Holiday"
+                              className={`mt-4 w-full block text-center py-3 rounded-xl font-semibold text-white ${colors.button} transition-colors hover:opacity-95`}
                             >
                               Select Package
-                            </button>
+                            </Link>
                           </div>
                         </motion.div>
                       );
@@ -165,7 +166,7 @@ export function PackagesModal({
                       <span className="text-emerald-500">🛡</span> ATOL Protected
                     </span>
                     <span className="flex items-center gap-2">
-                      <span className="text-emerald-500">✓</span> Free Cancellation
+                      <span className="text-emerald-500">✓</span> Best Price Guarantee
                     </span>
                     <span className="flex items-center gap-2">
                       <span className="text-emerald-500">🔒</span> Secure Payment

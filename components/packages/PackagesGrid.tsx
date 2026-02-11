@@ -29,7 +29,7 @@ export function PackagesGrid() {
                 Sale
               </span>
               <div className="absolute top-4 right-4 px-3 py-1.5 rounded-xl bg-white/95 text-slate-900 font-bold text-sm shadow">
-                From {pkg.priceFrom}
+                From {pkg.priceFrom} <span className="font-normal text-xs">pp</span>
               </div>
               <div className="absolute bottom-4 left-4 right-4">
                 <h2 className="text-xl font-bold text-white">{pkg.title}</h2>

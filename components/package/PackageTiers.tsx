@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 import type { PackageTier } from "@/lib/data";
 
@@ -21,7 +22,26 @@ const TIER_STYLES = {
   },
 } as const;
 
-export function PackageTiers({ tiers }: { tiers: PackageTier[] }) {
+function highlightPremiumAnd5Star(text: string, variant: "header" | "body" = "body") {
+  const highlightClass =
+    variant === "header"
+      ? "font-semibold text-amber-200"
+      : "font-semibold text-amber-600 bg-amber-100/90 px-0.5 rounded";
+  const parts = text
+    .split(/(Premium|5-star)/gi)
+    .map((part, i) =>
+      /^(Premium|5-star)$/i.test(part) ? (
+        <span key={i} className={highlightClass}>{part}</span>
+      ) : (
+        part
+      )
+    );
+  return <>{parts}</>;
+}
+
+export function PackageTiers({ tiers, packageTitle }: { tiers: PackageTier[]; packageTitle?: string }) {
+  const contactHref = packageTitle ? `/contact?package=${encodeURIComponent(packageTitle)}` : "/contact";
+
   return (
     <div className="grid md:grid-cols-3 gap-6">
       {tiers.map((tier, i) => {
@@ -42,7 +62,7 @@ export function PackageTiers({ tiers }: { tiers: PackageTier[] }) {
                 </span>
               )}
               <h3 className="font-bold text-white text-lg">{tier.name}</h3>
-              <p className="text-white/90 text-sm">{tier.subtitle}</p>
+              <p className="text-white/90 text-sm">{highlightPremiumAnd5Star(tier.subtitle, "header")}</p>
             </div>
             <div className="p-5">
               <p className={`text-2xl font-bold ${style.price}`}>
@@ -59,16 +79,18 @@ export function PackageTiers({ tiers }: { tiers: PackageTier[] }) {
                     ) : (
                       <span className="text-red-500 font-bold">✕</span>
                     )}
-                    <span className={f.included ? "text-slate-700" : "text-slate-500"}>{f.text}</span>
+                    <span className={f.included ? "text-slate-700" : "text-slate-500"}>
+                      {highlightPremiumAnd5Star(f.text)}
+                    </span>
                   </li>
                 ))}
               </ul>
-              <button
-                type="button"
-                className={`mt-4 w-full py-3 rounded-xl font-semibold text-white ${style.button} transition-colors`}
+              <Link
+                href={contactHref}
+                className={`mt-4 w-full inline-block text-center py-3 rounded-xl font-semibold text-white ${style.button} transition-colors hover:opacity-95`}
               >
                 Select Package
-              </button>
+              </Link>
             </div>
           </motion.div>
         );

@@ -48,7 +48,7 @@ export default async function PackageDetailPage({ params }: Props) {
           <h1 className="text-3xl md:text-4xl font-bold text-white mb-1">{pkg.title}</h1>
           <p className="text-white/90 text-lg">{pkg.location}</p>
           <p className="mt-3 text-2xl font-bold text-white">
-            From {pkg.priceFrom}
+            From {pkg.priceFrom} per person
             {pkg.duration && (
               <span className="text-white/80 text-lg font-normal"> / {pkg.duration}</span>
             )}
@@ -66,10 +66,10 @@ export default async function PackageDetailPage({ params }: Props) {
             <p className="text-slate-600 mb-8">
               Select the perfect holiday package for your trip to {pkg.title}
             </p>
-            <PackageTiers tiers={pkg.tiers!} />
+            <PackageTiers tiers={pkg.tiers!} packageTitle={pkg.title} />
             <div className="mt-8 pt-6 border-t border-slate-200 flex flex-wrap justify-center gap-6 text-slate-600 text-sm">
               <span className="flex items-center gap-2">🛡️ ATOL Protected</span>
-              <span className="flex items-center gap-2">✓ Free Cancellation</span>
+              <span className="flex items-center gap-2">✓ Best Price Guarantee</span>
               <span className="flex items-center gap-2">🔒 Secure Payment</span>
             </div>
           </div>
@@ -81,7 +81,30 @@ export default async function PackageDetailPage({ params }: Props) {
         <section className="mb-12">
           <h2 className="text-2xl font-bold text-slate-900 mb-4">About This Package</h2>
           <p className="text-slate-600 leading-relaxed">{pkg.fullDescription}</p>
+          {pkg.cityDetails && (
+            <p className="text-slate-600 leading-relaxed mt-4">{pkg.cityDetails}</p>
+          )}
         </section>
+
+        {/* Gallery */}
+        {pkg.gallery && pkg.gallery.length > 0 && (
+          <section className="mb-12">
+            <h2 className="text-2xl font-bold text-slate-900 mb-4">Explore {pkg.location}</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {pkg.gallery.map((src, i) => (
+                <div key={i} className="relative aspect-[4/3] rounded-xl overflow-hidden border-2 border-slate-200 shadow-md">
+                  <Image
+                    src={src}
+                    alt={`${pkg.title} view ${i + 1}`}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 100vw, 33vw"
+                  />
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* What's included */}
         <section className="mb-12">
