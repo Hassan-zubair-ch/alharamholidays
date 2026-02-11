@@ -1,21 +1,25 @@
-import { Hero } from "@/components/home/Hero";
-import { PackagesSection } from "@/components/home/PackagesSection";
-import { WhyChooseUs } from "@/components/home/WhyChooseUs";
+import { HeroNew } from "@/components/home/HeroNew";
+import { HeroSteps } from "@/components/home/HeroSteps";
+import { FeaturesSection } from "@/components/home/FeaturesSection";
+import { WhyChooseSection } from "@/components/home/WhyChooseSection";
+import { HomePackagesSection } from "@/components/home/HomePackagesSection";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { CTABanner } from "@/components/home/CTABanner";
-import { WorldMapSection } from "@/components/home/WorldMapSection";
-import { HomeForm } from "@/components/home/HomeForm";
+import { TrustPartnerSection } from "@/components/home/TrustPartnerSection";
+import { ContactSection } from "@/components/home/ContactSection";
 
 export default function Home() {
   return (
     <>
-      <Hero />
-      <PackagesSection />
-      <WhyChooseUs />
+      <HeroNew />
+      <HeroSteps />
+      <FeaturesSection />
+      <WhyChooseSection />
+      <HomePackagesSection />
       <TestimonialsSection />
       <CTABanner />
-      <WorldMapSection />
-      <HomeForm />
+      <TrustPartnerSection />
+      <ContactSection />
     </>
   );
 }

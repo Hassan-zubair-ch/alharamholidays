@@ -2,45 +2,46 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --emerald-deep: #0d4f3d;
-    --emerald-royal: #0f766e;
-    --gold: #c9a227;
-    --charcoal: #1f2937;
-    --white-soft: #fafafa;
-  }
-
-  html {
-    scroll-behavior: smooth;
-  }
-
-  body {
-    @apply bg-white text-charcoal antialiased;
-  }
+:root {
+  --background: #faf8f5;
+  --foreground: #0a0a0a;
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: pretty;
-  }
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-sans);
 }
 
-/* Custom scrollbar for premium feel */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+/* Smooth scroll + prevent horizontal scroll */
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
-::-webkit-scrollbar-track {
-  background: #f1f5f9;
+body {
+  overflow-x: hidden;
 }
 
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #0d4f3d, #059669);
-  border-radius: 4px;
+/* Selection */
+::selection {
+  background: rgba(124, 58, 237, 0.2);
+  color: var(--foreground);
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #0d4f3d;
+/* Gradient text utility */
+.gradient-text {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500;
+}
+
+/* Premium card border */
+.border-premium {
+  @apply border-2 border-slate-200/80;
+}
+
+/* Subtle parallax blur */
+.parallax-blur {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }

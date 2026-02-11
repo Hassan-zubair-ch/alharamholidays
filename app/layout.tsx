@@ -1,32 +1,20 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Poppins } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { FloatingContact } from "@/components/ui/FloatingContact";
+import { FloatingActionButtons } from "@/components/ui/FloatingActionButtons";
 
-const playfair = Playfair_Display({
+const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-playfair",
-  display: "swap",
-});
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-poppins",
+  variable: "--font-geist-sans",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Al Haram Travel UK | Luxury Holiday Packages & Umrah",
+  title: "Al Haram Travel | Premium Holiday Deals",
   description:
-    "Discover the world in premium comfort. Luxury & affordable holiday packages with trusted service. Umrah & holiday agency based in the UK.",
-  keywords: ["holiday packages", "Umrah", "luxury travel", "UK travel agency", "alharamtravel"],
-  openGraph: {
-    title: "Al Haram Travel UK | Luxury Holiday Packages & Umrah",
-    description: "Luxury & affordable holiday packages with trusted service.",
-  },
+    "Discover premium holiday deals with Al Haram Travel. Handpicked destinations, secure bookings, and dedicated support. UK-based travel agency.",
 };
 
 export default function RootLayout({
@@ -35,12 +23,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${playfair.variable} ${poppins.variable}`}>
-      <body className="font-sans min-h-screen flex flex-col">
+    <html lang="en" className={plusJakarta.variable}>
+      <body className="antialiased min-h-screen flex flex-col bg-[#faf8f5] text-[#0a0a0a] overflow-x-hidden">
         <Navbar />
-        <main className="flex-1">{children}</main>
+        <main className="flex-1 w-full min-w-0 overflow-x-hidden">{children}</main>
         <Footer />
-        <FloatingContact />
+        <FloatingActionButtons />
       </body>
     </html>
   );

@@ -3,99 +3,77 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useState } from "react";
 
-type PackageType = "Economy" | "Standard" | "Premium";
-
-interface PackageCardProps {
+type Destination = {
   id: string;
-  city: string;
+  name: string;
   country: string;
   description: string;
-  price: number;
+  price: string;
+  gradient: string;
   image: string;
-  accent: string;
-  index: number;
-}
-
-const PACKAGE_TYPES: PackageType[] = ["Economy", "Standard", "Premium"];
+  tags: readonly string[];
+};
 
 export function PackageCard({
-  id,
-  city,
-  country,
-  description,
-  price,
-  image,
-  accent,
+  destination,
   index,
-}: PackageCardProps) {
-  const [selectedType, setSelectedType] = useState<PackageType>("Premium");
-
+  onViewPackages,
+}: {
+  destination: Destination;
+  index: number;
+  onViewPackages: (id: string) => void;
+}) {
   return (
     <motion.article
-      className="group relative overflow-hidden rounded-2xl bg-white shadow-lg transition-shadow hover:shadow-luxury-lg"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.5, delay: index * 0.08 }}
       whileHover={{ y: -8 }}
+      className="group relative rounded-2xl border-2 border-slate-200 bg-white overflow-hidden shadow-premium hover:shadow-glow hover:border-purple-200 transition-all duration-300"
     >
-      <Link href={`/#packages`} className="block">
-        <div className="relative aspect-[4/3] overflow-hidden">
-          <Image
-            src={image}
-            alt={`${city}, ${country}`}
-            fill
-            className="object-cover transition-transform duration-500 group-hover:scale-110"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-charcoal-dark/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-          <motion.div
-            className={`absolute right-4 top-4 rounded-full px-4 py-2 text-sm font-semibold text-white shadow-lg bg-gradient-to-r ${accent}`}
-            initial={{ scale: 0.9 }}
-            whileInView={{ scale: 1 }}
-            viewport={{ once: true }}
-          >
-            From £{price}
-          </motion.div>
+      <div className="relative h-56 overflow-hidden">
+        <Image
+          src={destination.image}
+          alt={destination.name}
+          fill
+          className="object-cover transition-transform duration-500 group-hover:scale-110"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 p-4">
+          <h3 className="text-xl font-bold text-white">{destination.name}</h3>
+          <p className="text-white/90 text-sm">{destination.country}</p>
         </div>
-      </Link>
+        <div
+          className={`absolute top-4 right-4 px-3 py-1.5 rounded-xl bg-gradient-to-r ${destination.gradient} text-white text-sm font-semibold shadow-lg`}
+        >
+          From {destination.price}
+        </div>
+      </div>
 
-      <div className="p-6">
-        <h3 className="font-serif text-2xl font-bold text-charcoal">{city}</h3>
-        <p className="text-sm text-charcoal-light">{country}</p>
-        <p className="mt-2 text-sm text-gray-500">{description}</p>
-
-        <div className="mt-4 flex flex-wrap gap-2">
-          {PACKAGE_TYPES.map((type) => (
-            <button
-              key={type}
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                setSelectedType(type);
-              }}
-              className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 ${
-                selectedType === type
-                  ? "bg-gold/20 text-gold-dark font-semibold"
-                  : "bg-gray-100 text-charcoal-light hover:bg-gray-200"
-              }`}
+      <div className="p-5">
+        <p className="text-slate-600 text-sm mb-3">{destination.description}</p>
+        <div className="flex flex-wrap gap-2 mb-4">
+          {destination.tags.map((tag) => (
+            <span
+              key={tag}
+              className="px-2.5 py-1 rounded-lg bg-amber-100 text-slate-700 text-xs font-medium"
             >
-              {type}
-            </button>
+              {tag}
+            </span>
           ))}
         </div>
-
-        <Link
-          href="/#packages"
-          className={`mt-5 flex w-full items-center justify-center gap-2 rounded-xl py-3.5 font-semibold text-white shadow-md transition-all hover:shadow-lg bg-gradient-to-r ${accent}`}
+        <motion.button
+          whileHover={{ x: 4 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={() => onViewPackages(destination.id)}
+          className={`w-full py-3 rounded-xl font-semibold text-white bg-gradient-to-r ${destination.gradient} flex items-center justify-center gap-2 shadow-md group-hover:shadow-lg transition-shadow`}
         >
           View Packages
-          <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-          </svg>
-        </Link>
+          <span className="group-hover:translate-x-1 transition-transform">→</span>
+        </motion.button>
       </div>
     </motion.article>
   );
